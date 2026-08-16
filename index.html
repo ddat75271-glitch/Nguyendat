@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nguyễn Thành Đạt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #b8d9e8;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        .fog-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(180, 220, 240, 0.25) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 80%, rgba(160, 210, 230, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 10% 80%, rgba(190, 225, 245, 0.15) 0%, transparent 40%);
+            filter: blur(8px);
+            animation: fogPulse 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes fogPulse {
+            0% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.9; transform: scale(1.05) rotate(2deg); }
+            100% { opacity: 0.5; transform: scale(0.95) rotate(-2deg); }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: repeating-radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.03) 0px, transparent 80px),
+                        repeating-radial-gradient(circle at 80% 70%, rgba(200, 230, 250, 0.04) 0px, transparent 100px);
+            filter: blur(20px);
+            animation: smokeDrift 18s linear infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes smokeDrift {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: translate(30px, -20px) scale(1.2) rotate(5deg); opacity: 0.7; }
+            100% { transform: translate(-20px, 30px) scale(0.9) rotate(-5deg); opacity: 0.4; }
+        }
+
+        .card {
+            position: relative;
+            z-index: 2;
+            max-width: 550px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(80, 140, 180, 0.15);
+            padding: 35px 30px 45px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+        }
+
+        /* Header: tên bên trái - avatar bên phải */
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .profile-left {
+            flex: 1;
+        }
+
+        .profile-left .name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1a4a6b;
+            text-shadow: 0 4px 12px rgba(100, 180, 220, 0.3);
+            line-height: 1.2;
+        }
+
+        .profile-left .sub-title {
+            font-size: 1rem;
+            color: #2a5a7a;
+            opacity: 0.7;
+            font-weight: 600;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* Avatar bên phải - chữ ĐẠT */
+        .avatar-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8fc9e0, #6ab0d0);
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a4a6b;
+            text-shadow: 0 4px 12px rgba(60, 120, 160, 0.3);
+            box-shadow: 0 8px 25px rgba(60, 140, 180, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Vòng tròn xoay quanh avatar */
+        .avatar-ring {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .avatar-ring .dot {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #b0ddf0, #7ac0e0);
+            border-radius: 50%;
+            box-shadow: 0 0 18px #8acce8;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            animation: spinDot 7s linear infinite;
+            border: 1px solid rgba(255, 255, 240, 0.7);
+        }
+
+        .avatar-ring .dot:nth-child(2) {
+            width: 12px;
+            height: 12px;
+            margin-left: -6px;
+            margin-top: -6px;
+            background: radial-gradient(circle at 30% 30%, #c0e8f5, #8acce8);
+            animation: spinDotReverse 9s linear infinite;
+        }
+
+        .avatar-ring .dot:nth-child(3) {
+            width: 10px;
+            height: 10px;
+            margin-left: -5px;
+            margin-top: -5px;
+            background: radial-gradient(circle at 30% 30%, #d0eef8, #72b8d8);
+            animation: spinDotInner 5s linear infinite;
+        }
+
+        @keyframes spinDot {
+            0% { transform: rotate(0deg) translateX(72px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(72px) rotate(-360deg); }
+        }
+
+        @keyframes spinDotReverse {
+            0% { transform: rotate(0deg) translateX(58px) rotate(0deg); }
+            100% { transform: rotate(-360deg) translateX(58px) rotate(360deg); }
+        }
+
+        @keyframes spinDotInner {
+            0% { transform: rotate(0deg) translateX(42px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(42px) rotate(-360deg); }
+        }
+
+        /* Social links - kéo xuống dưới */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #1a4a6b;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(60, 140, 180, 0.08);
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(60, 140, 180, 0.2);
+        }
+
+        .social-links a i {
+            font-size: 1.3rem;
+        }
+
+        .social-links a .fa-facebook { color: #1877f2; }
+        .social-links a .fa-tiktok { color: #000; }
+        .social-links a .fa-phone-alt { color: #25d366; }
+
+        /* Bụi li ti - bay khắp trang */
+        .dust-layer {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .dust-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(180, 220, 240, 0.3) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(200, 235, 255, 0.6);
+            animation: dustFloat 8s ease-in-out infinite alternate;
+            opacity: 0.6;
+        }
+
+        @keyframes dustFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            100% { transform: translate(var(--tx, 40px), var(--ty, -30px)) scale(1.8); opacity: 1; }
+        }
+
+        /* Mũi tên kéo xuống */
+        .scroll-down {
+            text-align: center;
+            margin-top: 25px;
+            color: #1a4a6b;
+            opacity: 0.5;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+            cursor: default;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .scroll-down i {
+            display: block;
+            font-size: 2rem;
+        }
+
+        .scroll-down span {
+            font-size: 0.8rem;
+            display: block;
+            margin-top: 5px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 520px) {
+            .card { padding: 25px 18px 35px; }
+            .profile-left .name { font-size: 1.6rem; }
+            .profile-left .sub-title { font-size: 0.85rem; }
+            .avatar { width: 80px; height: 80px; font-size: 2rem; }
+            .social-links a { padding: 12px 20px; font-size: 0.85rem; gap: 8px; }
+            .social-links { gap: 12px; }
+            
+            @keyframes spinDot {
+                0% { transform: rotate(0deg) translateX(56px) rotate(0deg); }
+                100% { transform: rotate(360deg) translateX(56px) rotate(-360deg); }
+            }
+            @keyframes spinDotReverse {
+                0% { transform: rotate(0deg) translateX(45px) rotate(0deg); }
+                100% { transform: rotate(-360deg) translateX(45px) rotate(360deg); }
+            }
+            @keyframes spinDotInner {
+                0% { transform: rotate(0deg) translateX(34px) rotate(0deg); }
+                100% { transform: rotate(360deg) translateX(34px) rotate(-360deg); }
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card { padding: 20px 15px 30px; }
+            .profile-left .name { font-size: 1.3rem; }
+            .profile-left .sub-title { font-size: 0.75rem; }
+            .avatar { width: 70px; height: 70px; font-size: 1.6rem; }
+            .social-links { gap: 8px; }
+            .social-links a { padding: 10px 16px; font-size: 0.75rem; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="fog-overlay"></div>
+
+    <!-- Bụi li ti bay khắp trang -->
+    <div class="dust-layer" id="dustLayer"></div>
+
+    <div class="card">
+        <!-- Header: tên bên trái - avatar bên phải -->
+        <div class="profile-header">
+            <div class="profile-left">
+                <div class="name">Nguyễn Thành Đạt</div>
+                <div class="sub-title">✦ Website Developer ✦</div>
+            </div>
+            <div class="avatar-wrapper">
+                <div class="avatar">ĐẠT</div>
+                <div class="avatar-ring">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mũi tên kéo xuống -->
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+            <span>KÉO XUỐNG</span>
+        </div>
+
+        <!-- Social links - kéo xuống dưới -->
+        <div class="social-links">
+            <a href="https://www.facebook.com/share/1E7dzKMYPJ/" target="_blank">
+                <i class="fab fa-facebook"></i> Facebook
+            </a>
+            <a href="https://www.tiktok.com/@nguyendat8752" target="_blank">
+                <i class="fab fa-tiktok"></i> TikTok
+            </a>
+            <a href="tel:+84798514321">
+                <i class="fas fa-phone-alt"></i> 0798514321
+            </a>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const dustLayer = document.getElementById('dustLayer');
+            if (dustLayer) {
+                for (let i = 0; i < 100; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'dust-particle';
+                    const size = 2 + Math.random() * 6;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const duration = 6 + Math.random() * 12;
+                    const delay = Math.random() * 10;
+                    const tx = (Math.random() - 0.5) * 120;
+                    const ty = (Math.random() - 0.5) * 120;
+                    particle.style.cssText = `
+                        width:${size}px; height:${size}px;
+                        left:${x}%; top:${y}%;
+                        --tx:${tx}px; --ty:${ty}px;
+                        animation-duration:${duration}s;
+                        animation-delay:${delay}s;
+                        opacity:${0.3 + Math.random() * 0.7};
+                    `;
+                    dustLayer.appendChild(particle);
+                }
+            }
+        })();
+    </script>
+</body>
+                      </html>
